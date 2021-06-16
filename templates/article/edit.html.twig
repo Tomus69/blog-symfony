@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Article{% endblock %}
+
+{% block body %}
+<div class="container">
+{{ include('default/nav.html.twig') }}
+
+    <h1 class="text-center mt-5">Modifier mon article</h1>
+
+    {{ include('article/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+    <a href="{{ path('article_index') }}" class='btn btn-primary'>Retour aux articles</a>
+
+    {{ include('article/_delete_form.html.twig') }}
+</div>
+{% endblock %}

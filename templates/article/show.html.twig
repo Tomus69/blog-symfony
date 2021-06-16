@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block body %}
+<div class='container'>
+    {{ include('default/nav.html.twig') }}
+    <h1 class="text-center mt-5"><strong>{{ article.title }}</strong> en détail :</h1>
+    <div class="row justify-content-around">
+        <div class='card mt-4' style='width:30rem;background-color:#A3E4D7'>
+            <div class='card-body'>
+                <h3 class='card-title text-center'>{{ article.title }}</h3>
+                <img src='{{ asset('img/' ~ article.img) }}' class='card-img mt-1' alt='..'>
+                <p class='card-text'>{{ article.content }}</p>
+                <p class='card-footer' style='font-size:90%;'>{{ article.footer }}</p>
+                <p class='card-text' style='font-size:70%;'>Publié le : {{ article.createdAt ? article.createdAt|date('d-m-Y H:i') : '' }}</p>
+                <p class='card-text' style='font-size:80%;'>{{ comments|length }} commentaires</p>
+                <p class='card-text' style='font-size:80%;'>{{ article.nblike }} likes</p>
+                {% if not isLiked %}
+                    <form action='{{path('article_like', {'id': article.id, 'like': 'true'} )}}' {{ stimulus_controller('like') }} data-action='like#onSubmit'>
+                        <button like="true" class="btn-success like">J'aime</button>
+                    </form>
+                {% else %}
+                    <form action='{{path('article_like', {'id': article.id, 'like': 'false'} )}}' {{ stimulus_controller('like') }} data-action='like#onSubmit'>
+                        <button like="false" class="btn-danger like">Je n'aime plus</button>
+                    </form>    
+                {% endif %}          
+            </div>
+        </div>
+    </div><hr/>
+    <h4 class="text-center mt-3">Commentaires :</h4>
+    <div class="container" style='border:1px blue solid;background-color:whitesmoke'>   
+        {% for comment in comments %}
+            <h6 class>Commentaire écrit par {{ comment.user.username }} le {{ comment.createdAt ? comment.createdAt|date('d/m/Y') : '' }} :</h6>
+            <p>{{ comment.content }}</p>
+        {% else %}
+            <p>Il n'y a pas encore de commentaire, publiez le premier !</p>
+        {% endfor %}
+    </div><hr/>
+    <div class="container mt-2">
+        {{ form(form) }}
+    </div><hr/>
+    <a href="{{ path('article_index') }}" class='btn btn-primary'>Retour aux articles</a>
+    <a href="{{ path('my_article') }}" class='btn btn-primary'>Retour à mes articles</a>
+</div>
+{% endblock %}

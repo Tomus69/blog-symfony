@@ -89,7 +89,7 @@ class ArticleController extends AbstractController
         $likes = $this->getDoctrine()->getRepository(Like::class)->findBy(['articles' => $article]);
 
         $isLiked = false;
-        // dd($article->getLikes()->getValues());
+
         foreach($article->getLikes()->getValues() as $like){
             if($like->getUsers()->getId() === $this->getUser()->getId())
             {
@@ -172,15 +172,10 @@ class ArticleController extends AbstractController
     public function like(Article $article, Request $request): Response
     {
 
-        // Vérifier dans la requete query quelle est la valeur de data/like
-        // si c'est égal true tu add le like
-        // sinno tu le remove
-
         $article->setUsers($this->getUser());
         $articleId = $article->getId();
         $em = $this->getDoctrine()->getManager();
        
-        
         if($request->get('like') === 'true')
         {    
             $like = new Like();
